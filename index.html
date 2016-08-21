@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Get QR Code - QR Code Generator</title>
+<meta name="description" content="JavaScript based QR Code generator"/>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css"/>
+</head>
+<body>
+  <div class="container">
+    <header class="page-header">
+      <h1>Get QR Code</h1>
+      <p class="lead">
+        JavaScript based QR Code Generator
+      </p>
+    </header>
+    <form role="form">
+      <div class="form-group has-feedback">
+        <label class="control-label" for="text">Enter text</label>
+        <textarea id="text" rows="10" class="form-control" placeholder="Enter text"></textarea>
+        <a href="#" class="form-control-feedback link-of-text" title="Link of this text">
+          <span class="glyphicon glyphicon-link"></span>
+        </a>
+      </div>
+    </form>
+    <div class="pull-right">
+      <div class="fb-like" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true"></div>
+    </div>
+    <div class="pull-right">
+      <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+    </div>
+    <p class="lead">QR Code images</p>
+    <div class="alert alert-danger qrcode-error" style="display: none;"></div>
+    <p>
+      128x128
+      <div class="qrcode thumbnail" style="width: 128px;"></div>
+    </p>
+    <p>
+      256x256
+      <div class="qrcode thumbnail" style="width: 256px;"></div>
+    </p>
+    <p>
+      512x512
+      <div class="qrcode thumbnail" style="width: 512px;"></div>
+    </p>
+    <p>
+      1024x1024
+      <div class="qrcode thumbnail" style="width: 1024px;"></div>
+    </p>
+    <p>
+      Get QR Code &copy; hidetake.org, 2014.
+      Thanks to <a href="https://github.com/davidshimjs/qrcodejs">davidshimjs&apos;s QRCode.js</a>.
+    </p>
+  </div>
+</body>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1470096443269611',
+      xfbml      : true,
+      version    : 'v2.1'
+    });
+  };
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="qrcode.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $('.qrcode').each(function () {
+      $(this).data('qrcode', new QRCode(this, {
+        width: $(this).width(),
+        height: $(this).width(),
+        correctLevel: QRCode.CorrectLevel.M
+      }));
+    });
+    $('#text').change(function () {
+      $('.qrcode').each(function () {
+        try {
+          $('.qrcode-error').hide();
+          $(this).show().data('qrcode').makeCode($('#text').val());
+        } catch (e) {
+          $('.qrcode-error').show().text(e.message);
+          $(this).hide();
+        }
+      });
+      $('.link-of-text').attr('href', '#' + $('#text').val());
+    })
+    .keydown(function () {
+      var original = $(this).val();
+      if ($(this).data('timer')) {
+        window.clearTimeout($(this).data('timer'));
+      }
+      $(this).data('timer', window.setTimeout(function () {
+        if ($(this).val() != original) {
+          $(this).change();
+        }
+      }.bind(this), 100));
+    })
+    .val(location.hash.substring(1) || location.href)
+    .change();
+  });
+</script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-3232369-2', 'auto');
+ga('send', 'pageview');
+</script>
+
+</html>
